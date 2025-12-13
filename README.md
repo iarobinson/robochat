@@ -1,42 +1,92 @@
 # Robochat
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/robochat`. To experiment with that code, run `bin/console` for an interactive prompt.
+As of December 2025, this adds Claude AI chat to your Rails application.
+
+The goal will to make adding various different LLMs to a single application with a single gem.
 
 ## Installation
 
-TODO: Replace `robochat` with your gem name right after releasing it to RubyGems.org. Please do not do it earlier due to security reasons. Alternatively, replace this section with instructions to install your gem from git if you don't plan to release to RubyGems.org.
+Add robochat to your Gemfile:
 
-Install the gem and add to the application's Gemfile by executing:
-
-```bash
-bundle add robochat
+```ruby
+gem 'robochat'
 ```
 
-If bundler is not being used to manage dependencies, install the gem by executing:
-
+Then budle:
 ```bash
-gem install robochat
+bundle install
 ```
 
-## Usage
+## Quick Start
 
-TODO: Write usage instructions here
+1. **Set your API key:**
 
-## Development
+### For Anthropic
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+```bash
+# Set environment variable
+export ANTHROPIC_API_KEY='your-key-here'
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+# Or use Rails credentials
+rails credentials:edit
+# Add: anthropic: { api_key: your-key-here }
+```
+
+2. **Create initializer:**
+```ruby
+# config/initializers/robochat.rb
+Robochat.configure do |config|
+  config.api_key = ENV['ANTHROPIC_API_KEY']
+  config.model = 'claude-sonnet-4-20250514'
+  config.max_tokens = 4096
+end
+```
+
+3. **Mount the engine:**
+```ruby
+# config/routes.rb
+Rails.application.routes.draw do
+  mount Robochat::Engine => '/chat'
+end
+```
+
+4. **Start chatting!**
+
+Visit `http://localhost:3000/chat` and start chatting with Claude!
+
+## Configuration Options
+```ruby
+Robochat.configure do |config|
+  config.api_key = ENV['ANTHROPIC_API_KEY']     # Required
+  config.model = 'claude-sonnet-4-20250514'     # Default model
+  config.max_tokens = 4096                       # Max response length
+  config.temperature = 1.0                       # Response creativity
+  config.system_prompt = "You are helpful..."    # Custom system prompt
+end
+```
+
+### For ChatGPT
+
+(coming soon)
+
+### For Grok
+
+(coming soon)
+
+### For Perplexity
+
+(coming soon)
+
+## Requirements
+
+- Ruby >= 3.0
+- Rails >= 7.0
+- Anthropic API key ([get one here](https://console.anthropic.com/))
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/iarobinson/robochat. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/robochat/blob/main/CODE_OF_CONDUCT.md).
+Bug reports and pull requests are welcome on GitHub at https://github.com/iarobinson/robochat
 
 ## License
 
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
-
-## Code of Conduct
-
-Everyone interacting in the Robochat project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/robochat/blob/main/CODE_OF_CONDUCT.md).
-
+MIT License - see LICENSE.txt for details
