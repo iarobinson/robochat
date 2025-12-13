@@ -4,6 +4,25 @@
 
 As of December 2025, this adds Claude AI chat to your Rails application.
 
+### What it does:
+
+- Provides a Rails Engine that mounts a chat interface
+- Single-page chat UI with Claude-like styling (vanilla CSS)
+- Makes API calls to Anthropic's Claude
+- Configuration system for API key, model, max_tokens, etc.
+- Simple request/response (no conversation history)
+- No database required
+
+### What it doesn't do yet:
+
+- No conversation persistence (each message is standalone)
+- No user authentication hooks
+- No streaming responses
+- No file uploads
+- No conversation history UI
+- No customization options for styling
+- No helper methods for embedding chat in other views
+
 The goal will to make adding various different LLMs to a single application with a single gem.
 
 ## Installation
