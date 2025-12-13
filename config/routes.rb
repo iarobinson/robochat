@@ -1,4 +1,4 @@
 Robochat::Engine.routes.draw do
-  root to: "chats#index"
-  post "/ask", to: "chats#ask"
+  resources :messages, only: [:index, :create]
+  root 'messages#index'
 end

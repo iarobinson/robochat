@@ -37,6 +37,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "rails", ">= 7.0"
   spec.add_dependency "openai", ">= 0.37.0"
+  spec.add_dependency "httparty", "~> 0.21"
   spec.add_development_dependency "rspec", "~> 3.0"
   spec.add_development_dependency "bundler", "~> 2.0"
 
