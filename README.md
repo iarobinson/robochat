@@ -1,4 +1,6 @@
 # Robochat
+[![Gem Version](https://badge.fury.io/rb/robochat.svg)](https://badge.fury.io/rb/robochat)
+[![Build Status](https://github.com/iarobinson/robochat/workflows/CI/badge.svg)](https://github.com/iarobinson/robochat/actions)
 
 As of December 2025, this adds Claude AI chat to your Rails application.
 
