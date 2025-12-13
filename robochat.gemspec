@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.description = "Adding this gem to your Ruby on Rails project allows for quick API integration to various LLM APIs."
   spec.homepage = "https://github.com/iarobinson/robochat"
   spec.license = "MIT"
-  spec.required_ruby_version = ">= 3.3.0"
+  spec.required_ruby_version = ">= 3.2.2"
 
   spec.metadata["allowed_push_host"] = spec.homepage
 
@@ -36,10 +36,10 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "rails", ">= 7.0"
-  spec.add_dependency "openai", "~> 4.0"
+  spec.add_dependency "openai", ">= 0.37.0"
   spec.add_development_dependency "rspec", "~> 3.0"
   spec.add_development_dependency "bundler", "~> 2.0"
 
-  # Add CLI
-  spec.executables = Dir["bin/*"].map{ |f| File.basename(f) }
+  # TODO: Add this for a CLI integration
+  spec.executables = Dir["exe/*"].map { |f| File.basename(f) }
 end

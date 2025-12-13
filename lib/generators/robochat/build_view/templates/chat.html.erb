@@ -3,22 +3,22 @@
 <div id="chat-box"></div>
 
 <form id="chat-form">
-  <input type="text" id="question" placeholder="Ask me anything..." />
+  <input type="text" id="question" placeholder="How can I help?" />
   <button type="submit">Send</button>
 </form>
 
 <script>
-document.getElementById("chat-form").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const question = document.getElementById("question").value;
-  const res = await fetch("<%= robochat.ask_path %>", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ question })
-  });
-  const data = await res.json();
-  const chatBox = document.getElementById("chat-box");
-  chatBox.innerHTML += `<p><strong>You:</strong> ${question}</p>`;
-  chatBox.innerHTML += `<p><strong>Bot:</strong> ${data.answer}</p>`;
-});
+    document.getElementById("chat-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const question = document.getElementById("question").value;
+    const res = await fetch("<%= robochat.ask_path %>", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question })
+    });
+    const data = await res.json();
+    const chatBox = document.getElementById("chat-box");
+    chatBox.innerHTML += `<p><strong>You:</strong> ${question}</p>`;
+    chatBox.innerHTML += `<p><strong>Bot:</strong> ${data.answer}</p>`;
+    });
 </script>
