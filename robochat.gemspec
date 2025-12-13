@@ -24,11 +24,11 @@ Gem::Specification.new do |spec|
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
   gemspec = File.basename(__FILE__)
   spec.files = IO.popen(%w[git ls-files -z], chdir: __dir__, err: IO::NULL) do |ls|
-    ls.readlines("\x0", chomp: true).reject do |f|
-      (f == gemspec) ||
-        f.start_with?(*%w[app/ lib/ config/ bin/ test/ spec/ features/ .git .github appveyor Gemfile])
+    ls.read.split("\x0").reject do |f|
+      f.end_with?(".gem")
     end
   end
+
   spec.files += %w[LICENSE README.md] if File.exist?("LICENSE") && File.exist?("README.md")
 
   spec.bindir = "exe"
