@@ -1,4 +1,8 @@
 # frozen_string_literal: true
+# 
+require "robochat/version"
+require "robochat/engine"
+require "httparty"
 
 require "robochat/providers/base"
 require "robochat/providers/claude"
@@ -21,32 +25,37 @@ module Robochat
     attr_accessor :temperature, :system_prompt
     
     def initialize
-      @providers = [:claude]  # Default to Claude only
+      @providers = [:claude]
       @default_provider = :claude
       
-      # Claude defaults
       @claude_api_key = ENV['ANTHROPIC_API_KEY'] || 
                         Rails.application.credentials.dig(:anthropic, :api_key)
       @claude_model = 'claude-sonnet-4-20250514'
       @claude_max_tokens = 4096
       
-      # OpenAI defaults
       @openai_api_key = ENV['OPENAI_API_KEY'] || 
                         Rails.application.credentials.dig(:openai, :api_key)
       @openai_model = 'gpt-4'
       @openai_max_tokens = 4096
       
-      # Shared
       @temperature = 1.0
       @system_prompt = "You are a helpful AI assistant."
     end
   end
 
   class << self
-    attr_accessor :provider, :api_key, :model
-
-    def self.configure
-      yield self
+    attr_writer :configuration
+    
+    def configuration
+      @configuration ||= Configuration.new
+    end
+    
+    def configure
+      yield(configuration)
+    end
+    
+    def reset_configuration!
+      @configuration = Configuration.new
     end
   end
 end
