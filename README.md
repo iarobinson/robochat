@@ -19,9 +19,9 @@ bundle install
 
 ## Quick Start
 
-1. **Set your API key:**
-
 ### For Anthropic
+
+1. **Set your API key:**
 
 ```bash
 # Set environment variable
@@ -54,7 +54,7 @@ end
 
 Visit `http://localhost:3000/chat` and start chatting with Claude!
 
-## Configuration Options
+#### Configuration Options
 ```ruby
 Robochat.configure do |config|
   config.api_key = ENV['ANTHROPIC_API_KEY']     # Required
