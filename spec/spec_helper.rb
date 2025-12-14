@@ -1,7 +1,10 @@
-# spec/spec_helper.rb
 require 'rails'
 require 'action_controller/railtie'
+require 'webmock/rspec'
 require 'robochat'
+
+# Disable real HTTP requests
+WebMock.disable_net_connect!(allow_localhost: true)
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
@@ -13,4 +16,10 @@ RSpec.configure do |config|
   end
 
   config.shared_context_metadata_behavior = :apply_to_host_groups
+  config.filter_run_when_matching :focus
+
+  # Reset configuration before each test
+  config.before(:each) do
+    Robochat.reset_configuration!
+  end
 end

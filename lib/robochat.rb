@@ -29,12 +29,12 @@ module Robochat
       @default_provider = :claude
       
       @claude_api_key = ENV['ANTHROPIC_API_KEY'] || 
-                        Rails.application.credentials.dig(:anthropic, :api_key)
+                    (defined?(Rails) && Rails.application ? Rails.application.credentials.dig(:anthropic, :api_key) : nil)
       @claude_model = 'claude-sonnet-4-20250514'
       @claude_max_tokens = 4096
       
       @openai_api_key = ENV['OPENAI_API_KEY'] || 
-                        Rails.application.credentials.dig(:openai, :api_key)
+                    (defined?(Rails) && Rails.application ? Rails.application.credentials.dig(:openai, :api_key) : nil)
       @openai_model = 'gpt-4'
       @openai_max_tokens = 4096
       

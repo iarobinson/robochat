@@ -10,3 +10,8 @@ gem "bundler", "~> 2.0"
 gem "irb"
 gem "rake", "~> 13.0"
 gem "rspec", "~> 3.0"
+
+group :development, :test do
+  gem 'rspec', '~> 3.0'
+  gem 'webmock', '~> 3.19'
+end
