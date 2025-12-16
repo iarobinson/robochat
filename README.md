@@ -2,16 +2,16 @@
 [![Gem Version](https://badge.fury.io/rb/robochat.svg)](https://badge.fury.io/rb/robochat)
 [![Build Status](https://github.com/iarobinson/robochat/workflows/CI/badge.svg)](https://github.com/iarobinson/robochat/actions)
 
-As of December 2025, this adds Claude AI chat to your Rails application.
+Add AI chat to your Rails application with support for multiple LLM providers.
 
 ### What it does:
 
-- Provides a Rails Engine that mounts a chat interface
-- Single-page chat UI with Claude-like styling (vanilla CSS)
-- Makes API calls to Anthropic's Claude
-- Configuration system for API key, model, max_tokens, etc.
-- Simple request/response (no conversation history)
+- Rails Engine with a clean chat interface (vanilla CSS)
+- **Multi-provider support**: Claude (Anthropic) and OpenAI (ChatGPT)
+- Switch between providers with a dropdown or configure specific routes
+- Simple configuration system
 - No database required
+- Request/response chat (stateless)
 
 ### What it doesn't do yet:
 
@@ -23,43 +23,40 @@ As of December 2025, this adds Claude AI chat to your Rails application.
 - No customization options for styling
 - No helper methods for embedding chat in other views
 
-The goal will to make adding various different LLMs to a single application with a single gem.
-
 ## Installation
 
 Add robochat to your Gemfile:
-
 ```ruby
 gem 'robochat'
 ```
 
-Then budle:
+Then bundle:
 ```bash
 bundle install
 ```
 
 ## Quick Start
 
-### For Anthropic
+### Single Provider (Claude)
 
 1. **Set your API key:**
-
 ```bash
 # Set environment variable
-export ANTHROPIC_API_KEY='your-key-here'
+export ANTHROPIC_API_KEY='sk-ant-...'
 
 # Or use Rails credentials
 rails credentials:edit
-# Add: anthropic: { api_key: your-key-here }
+# Add: anthropic: { api_key: sk-ant-... }
 ```
 
 2. **Create initializer:**
 ```ruby
 # config/initializers/robochat.rb
 Robochat.configure do |config|
-  config.api_key = ENV['ANTHROPIC_API_KEY']
-  config.model = 'claude-sonnet-4-20250514'
-  config.max_tokens = 4096
+  config.providers = [:claude]
+  config.claude_api_key = ENV['ANTHROPIC_API_KEY']
+  config.claude_model = 'claude-sonnet-4-20250514'
+  config.claude_max_tokens = 4096
 end
 ```
 
@@ -75,34 +72,114 @@ end
 
 Visit `http://localhost:3000/chat` and start chatting with Claude!
 
-#### Configuration Options
+### Single Provider (OpenAI)
+
+1. **Set your API key:**
+```bash
+# Set environment variable
+export OPENAI_API_KEY='sk-...'
+
+# Or use Rails credentials
+rails credentials:edit
+# Add: openai: { api_key: sk-... }
+```
+
+2. **Create initializer:**
 ```ruby
+# config/initializers/robochat.rb
 Robochat.configure do |config|
-  config.api_key = ENV['ANTHROPIC_API_KEY']     # Required
-  config.model = 'claude-sonnet-4-20250514'     # Default model
-  config.max_tokens = 4096                       # Max response length
-  config.temperature = 1.0                       # Response creativity
-  config.system_prompt = "You are helpful..."    # Custom system prompt
+  config.providers = [:openai]
+  config.openai_api_key = ENV['OPENAI_API_KEY']
+  config.openai_model = 'gpt-4'
+  config.openai_max_tokens = 4096
 end
 ```
 
-### For ChatGPT
+3. **Mount and chat** (same as Claude setup above)
 
-(coming soon)
+### Multiple Providers
 
-### For Grok
+Enable both Claude and OpenAI with a dropdown selector:
+```ruby
+# config/initializers/robochat.rb
+Robochat.configure do |config|
+  config.providers = [:claude, :openai]
+  config.default_provider = :claude
+  
+  # Claude config
+  config.claude_api_key = ENV['ANTHROPIC_API_KEY']
+  config.claude_model = 'claude-sonnet-4-20250514'
+  config.claude_max_tokens = 4096
+  
+  # OpenAI config
+  config.openai_api_key = ENV['OPENAI_API_KEY']
+  config.openai_model = 'gpt-4'
+  config.openai_max_tokens = 4096
+  
+  # Shared settings
+  config.temperature = 1.0
+  config.system_prompt = "You are a helpful AI assistant."
+end
+```
 
-(coming soon)
+The chat UI will show a dropdown to switch between providers.
 
-### For Perplexity
+### Custom Routes
 
-(coming soon)
+You can create custom routes for specific providers:
+```ruby
+# config/routes.rb
+Rails.application.routes.draw do
+  # Main chat with all providers
+  mount Robochat::Engine => '/chat'
+  
+  # Custom provider-specific routes
+  get '/claude-assistant', to: 'robochat/messages#claude'
+  get '/gpt-helper', to: 'robochat/messages#openai'
+  
+  root 'robochat/messages#index'
+end
+```
+
+## Configuration Options
+
+### Claude Settings
+```ruby
+config.claude_api_key      # Your Anthropic API key
+config.claude_model        # Default: 'claude-sonnet-4-20250514'
+config.claude_max_tokens   # Default: 4096
+```
+
+### OpenAI Settings
+```ruby
+config.openai_api_key      # Your OpenAI API key
+config.openai_model        # Default: 'gpt-4'
+config.openai_max_tokens   # Default: 4096
+```
+
+### Shared Settings
+```ruby
+config.providers           # Array of enabled providers, e.g. [:claude, :openai]
+config.default_provider    # Which provider to use by default
+config.temperature         # Response creativity (0.0-2.0), default: 1.0
+config.system_prompt       # Custom system prompt for all providers
+```
 
 ## Requirements
 
 - Ruby >= 3.0
 - Rails >= 7.0
-- Anthropic API key ([get one here](https://console.anthropic.com/))
+- API keys:
+  - Anthropic ([get one here](https://console.anthropic.com/))
+  - OpenAI ([get one here](https://platform.openai.com/api-keys))
+
+## Roadmap
+
+Future provider support planned:
+- Grok (xAI)
+- Perplexity
+- Google Gemini
+- Mistral
 
 ## Contributing
 

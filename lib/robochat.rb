@@ -59,3 +59,5 @@ module Robochat
     end
   end
 end
+
+require "robochat/application_helper"
